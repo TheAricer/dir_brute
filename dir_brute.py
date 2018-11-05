@@ -58,28 +58,31 @@ def head(fname):
 }
     re_key = re.compile('<title>(.*?)</title>',re.S)
     try:
-        s = requests.head(url, headers = headers, timeout = 1)
-        r = requests.get(url, headers = headers, timeout = 1)
+        s = requests.head(url, headers = headers, timeout = 2)
+        r = requests.get(url, headers = headers, timeout = 2)
         if s.status_code == 200:
             num = 0
-            r.encoding = 'utf-8'
-            Val = re.findall(re_key,r.text)
-            for title in key_title:
-                if title in "".join(Val):
-                    num += 1
-                    #print("".join(Val))
-                else:
-                    pass
-            r.encoding = 'gbk'
-            Val = re.findall(re_key,r.text)
-            for title in key_title:
-                if title in "".join(Val):
-                    num += 1
-                    #print("".join(Val))
-                else:
-                    pass
-            if num < 1:
-                print('\033[1;32m{} \033[0m------状态码:{}------\033[1;35m 完成度为:{:.2%} \033[0m'.format(r.url,r.status_code,molecular/int(num_grave())))
+            if r.text not in compare_text:
+                if len(compare_text) <10:
+                    compare_text.append(r.text)   
+                r.encoding = 'utf-8'
+                Val = re.findall(re_key,r.text)
+                for title in key_title:
+                    if title in "".join(Val):
+                        num += 1
+                        #print("".join(Val))
+                    else:
+                        pass
+                r.encoding = 'gbk'
+                Val = re.findall(re_key,r.text)
+                for title in key_title:
+                    if title in "".join(Val):
+                        num += 1
+                        #print("".join(Val))
+                    else:
+                        pass
+                if num < 1:
+                    print('\033[1;32m{} \033[0m------状态码:{}------\033[1;35m 完成度为:{:.2%} \033[0m'.format(r.url,r.status_code,molecular/int(num_grave())))
         elif s.status_code == 302:
             num = 0
             #print(s.status_code)
@@ -149,9 +152,12 @@ def Thread_main(filename):
 if __name__ == '__main__':
     key_title = ['抱歉', '对不起','页面','存在','不','sorry','404', 'error']
     compare = [para_options().u]
+    exp = para_options().u + '/zzzzzzzztest'
+    #t = requests.get(exp, headers = headers, timeout = 2).text
+    compare_text = [requests.get(exp, timeout = 2).text]
+    #print(compare_text)
     n = 0
     f = StringIO()
     if para_options().u:
         bing()
         Thread_main(file_dict(para_options().d))
-
