@@ -152,10 +152,11 @@ def Thread_main(filename):
 if __name__ == '__main__':
     key_title = ['抱歉', '对不起','页面','存在','不','sorry','404', 'error']
     compare = [para_options().u]
-    exp = para_options().u + '/zzzzzzzztest'
-    #t = requests.get(exp, headers = headers, timeout = 2).text
-    compare_text = [requests.get(exp, timeout = 2).text]
-    #print(compare_text)
+    try:
+    	exp = para_options().u + '/callaricexixixixi'
+    	compare_text = [requests.get(exp, timeout = 2).text]
+    except:
+    	print('\033[1;36myou can enter -h for help\033[0m')
     n = 0
     f = StringIO()
     if para_options().u:
